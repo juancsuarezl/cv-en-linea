@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html"/>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>CV En Línea - Inicio</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="stylesheet" href="css/style.css" type="text/css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</head>
+
+<body>
+
+    <!-------------- BARRA DE NAVEGACIÓN ----------------->
+    <div class="topnav navbar navbar-expand d-flex align-items-center" id="myTopnav">
+        <a href="index.html" class="active"><img id="foto" class="img-fluid rounded-circle navbar-brand" src="img/copia jc.png" alt="Mi foto" style="width:100%;height:auto;"></a>
+        <a href="educacion.html">Educación</a>
+        <a href="experiencia.html">Experiencia</a>
+        <a href="skills.html">Skills</a>
+        <a href="intereses.html">Intereses</a>
+        <a href="contacto.html">Contacto</a>
+        <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+            <i class="fa fa-bars"></i>
+        </a>
+        
+      </div>
+      
+      <script>
+      function myFunction() {
+        var x = document.getElementById("myTopnav");
+        if (x.className === "topnav") {
+          x.className += " responsive";
+        } else {
+          x.className = "topnav";
+        }
+      }
+      </script>
+
+      <!-------------   FIN DE LA BARRA DE NAVEGACIÓN ------------>
+
+        <main class="pb-4 mx-5">
+            <div class="text-center pt-3"><h3>Juan Carlos Suárez</h3></div>
+            <div class="text-center mt-3 mb-5"><h4>Desarrollador Web</h4></div>
+
+            <p class="text-justify mx-4 mb-4 pb-2">Actualmente resido en Buenos Aires, Capital Federal, Argentina. Soy una persona proactiva, con metas 
+                claras, orientado a resultados. Tengo un título de Ingeniero Electrónico, y hace poco más de un año empecé 
+                a realizar diversos cursos de programación, comenzando por Visual Basic para Aplicaciones (VBA), y continuando 
+                con los lenguajes esenciales del Desarrollo Web Front-End, como lo son HTML5, CSS3 y JavaScript. <br><br>
+
+                En el presente dedico la mayor parte de mi tiempo libre a seguir estudiando y preparándome, con el fin de afrontar la era de cambios tecnológicos,
+                de la cual todos, queramos o no, somos parte hoy en día. Poco a poco he ido acumulando conocimientos y experiencias, no 
+                solamente en el Front-End, sino también en el Back-End e incluso en la parte de Diseño Web.
+            </p>
+
+            <div class="banner-contacto mt-4">
+                <div class="info-contacto container p-3 text-center justify-content-center" style="border-radius: 10px; width:60%;">
+                    <ul>
+                        <div class="text-center">
+                            <li id="info-titulo"><h6><b>Información de Contacto</b></h6></li>
+                            
+                                <li id="info-items"><i class="far fa-envelope mr-2"></i><em><b>juancsuarezl@gmail.com</b></em></li>
+                                <li id="info-items"><i class="fas fa-mobile-alt mr-2"></i><em><b>(+54) 9 11 5896-6771</b></em></li>
+                                <li id="info-items"><span style="font-size:20px;"><i class="fab fa-skype mr-2 text-dark"></i></span><em><b>live:.cid.55000e3e24157182</b></em></li>
+                        </div>
+                    </ul>    
+                </div>   
+            </div>
+        </main>
+
+    	<!--FOOTER-->
+
+		<footer class="pt-3 pb-3 mt-5 mb-3 text-center">
+
+            <b>&copy; Sitio desarrollado por Juan Carlos Suárez 2020. <br> Todos los derechos reservados</b>
+
+            <div class="d-flex justify-content-center mt-3" style="width:95%;">
+
+                <ul class="nav mt-3 mb-5">
+
+                    <div class="d-flex justify-content-center abs-center" style="width:100%;">
+            
+                        <li class="redes mb-5">
+                            <a href="https://www.github.com/juancsuarezl" target="_blank"><span style="font-size:25px;"><i class="fab fa-github mx-3 text-dark"></i></span></a>
+                        </li>
+                
+                        <li class="redes mb-5">
+                            <a href="https://rb.gy/z0nlyk" target="_blank"><span style="font-size:25px;"><i class="fab fa-linkedin mx-3 text-dark"></i></span></a>
+                        </li>
+                
+                        <li class="redes mb-5">
+                            <a href="http://api.whatsapp.com/send?phone=541158966771" target="_blank"><span style="font-size:25px;"><i class="fab fa-whatsapp mx-3 text-dark"></i></span></a>
+                        </li>
+
+                        <li class="redes mb-5">
+                            <a href="https://app.slack.com/client/T0183833F1P/C017WQKM544/user_profile/U019R65RD52" target="_blank"><span style="font-size:25px;"><i class="fab fa-slack mx-3 text-dark"></i></span></a>
+                        </li>
+                    </div>
+                </ul>
+            </div>
+
+    </footer>
+
+</body>
+
+</html>
