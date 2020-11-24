@@ -1,118 +1,149 @@
-const http = require ('http');
-const form = require ('fs');
-const querystring = require ('querystring');
-const util = require ('util');
-const nodemailer = require ('nodemailer');
-const NODE_ENV = process.env.NODE_ENV || 'development';
-require ('dotenv').config({
-   path: `../.env.${NODE_ENV}`
-});
+const http = require('http').createServer();
+const path = require('path');
+const url = require('url');
+const fs = require('fs');
+const querystring = require('querystring');
+const nodemailer = require('nodemailer');
+const mysql = require('mysql');
+const dotenv = require('dotenv');
 
-//Configuración del puerto y host del servidor
+dotenv.config();
+
 const port = process.env.PORT || 3000;
-const host = '127.0.0.1';
 
-// Configuración del Servidor HTTP en Node.js
-http.createServer(function(req, res) {
-   
-   if(req.method == 'POST'){
-      //Leo los datos del formulario
-      let info = '';
-      req.on('data', datosparciales => {
-      info += datosparciales;
-      })
-      req.on('end', () => {
-      let formulario = querystring.parse(info);
-      
-      res.writeHead(200, {'Content-Type': 'text/html'});
+const urls = [
+    {
+        route: '',
+        output: 'index.html'
 
-      //Respuesta del servidor al enviar el formulario (en http://localhost:3000)
-      res.end(`<!DOCTYPE html>
-      <html>
-      <head> 
-         <meta charset="UTF-8">
-      </head>
-      <body>
+    },
 
-    <h3> Muchas gracias por tu mensaje ${formulario.nombre}, en breve te estaré respondiendo!</h3>
+    {   
+        route: 'educacion',
+        output: 'educacion.html'
 
-    <a href="http://localhost:52330/index.html">Volver al inicio</a>
+    },
     
-    </body>
-    </html>
+    {   
+        route: 'experiencia',
+        output: 'experiencia.html'
+
+    },
     
-    `);
+    {   
+        route: 'skills',
+        output: 'skills.html'
 
-    //Establezco la conexión con la base de Datos MySQL
-      var mysql = require('mysql');
+    },
+    
+    {   
+        route: 'intereses',
+        output: 'intereses.html'
 
-      //Datos provenientes del formulario a ser insertados en la DB
-      var name = formulario.nombre;
-      var email = formulario.email;
-      var telefono = formulario.telefono;
-      var mensaje = formulario.mensaje;
+    },
 
-      var con = mysql.createConnection({
-      host: 'localhost',
-      port: 3306,
-      user: 'root',
-      password: '',
-      database: 'formdb'
-      });
-      
-      con.connect(function(err) {
-      if (err) {
-         console.error('error connecting: ' + err.stack);
-         return;
-      }
-      console.log('Conexión exitosa a la BD');
-      var sql = `INSERT INTO Interesados (name, email, telefono, mensaje) VALUES ('${name}', '${email}', '${telefono}', '${mensaje}')`;
-      console.log(`${name}, ${email}, ${telefono}, ${mensaje}`);
-      
-      con.query(sql, function (err, result) {
-         if (err) throw err;
-         console.log(result);
-      });
-      });
+    {   
+        route: 'contacto',
+        output: 'contacto.html'
 
-      //Variables de entorno USER_NAME y PASS para autenticación de cuenta de correo electrónico
-      const user = process.env.USER_NAME;
-      const pass = process.env.PASS;
+    },
 
-      //Configuración del correo electrónico
-      const transporter = nodemailer.createTransport({
-         service: 'gmail',
-         host: 'smtp.gmail.com',
-         port: 465,
-         auth: {
-            user: user,
-            pass: pass
-         }
-      });
+    /*{   
+        route: 'gracias',
+        output: 'gracias.html'
 
-      const mailOptions = {
-         from:'juancsuarezl@gmail.com',
-         to: 'juancsuarezl@gmail.com',
-         subject: 'Sent mail using Node JS',
-         html: `<h3>Datos:</h3><br>Nombre: ${formulario.nombre} <br> Correo Electrónico: ${formulario.email} <br> Teléfono: ${formulario.telefono} <br>Mensaje: ${formulario.mensaje}` 
-      }
+    },*/
+]
 
-      transporter.sendMail(mailOptions, function(error, info) {
-         if(error){
-            console.log(error);
-         }else{
-            console.log('Email sent successfully!');
-         }
-      })
+//https://cvenlinea.wiz.com.ar/gracias
+
+function webServer(req, res){
+
+    let pathURL = path.basename(req.url);
+
+   if(pathURL == 'gracias'){
+      if(req.method == 'POST'){
+         let form = '';
+         req.on('data', function(datosParciales){
+         form += datosParciales;
+                
+         req.on('end', function(){
+         const dataObject = querystring.parse(form);
+
+         const nombre = dataObject.nombre;
+         const email = dataObject.email;
+         const telefono = dataObject.telefono;
+         const mensaje = dataObject.mensaje;
+
+         res.end(`<h3>Gracias por tu mensaje <em>${nombre}</em>, te estaré contactando a la brevedad!</h3>
+                     <a href="https://cvenlinea.wiz.com.ar/gracias">Volver al inicio</a> `);
+    
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            host: 'smtp.gmail.com',
+            port: 465,
+            auth: {
+                user: process.env.USER_NAME,
+                pass: process.env.PASS
+                }
+        });
+                  
+        const mailOptions = {
+            from:process.env.USER_NAME,
+            to: process.env.USER_NAME,
+            subject: 'Sent mail using Node JS',
+            html: `<h3>Datos:</h3><br>Nombre: ${nombre} <br> 
+                    Correo Electrónico: ${email} <br> 
+                    Teléfono: ${telefono} <br>
+                    Mensaje: ${mensaje}` 
+        }
+                  
+        transporter.sendMail(mailOptions, function(error, info) {
+            if(error){
+                console.log(error);
+            }else{
+                console.log('Email sent successfully!');
+            }
+               
+        });
+
+        //Configuro la conexión con la BD MySQL
+        var con = {    
+            host: process.env.DB_HOST, 
+            port: process.env.DB_PORT,
+            user: process.env.DB_USER,
+            password:process.env.DB_PASS,
+            database: process.env.DB_NAME
+        }
+
+        con = mysql.createConnection(con);
+
+        con.connect(function(err) {
+            if (err) {
+                console.error('error connecting: ' + err.stack);
+                 return;
+            }
+            console.log('Conexión exitosa a la BD');
+            var sql = `INSERT INTO Interesados (name, email, telefono, mensaje) VALUES ('${nombre}', '${email}', '${telefono}', '${mensaje}')`;
             
-   })
-   res.writeHead(200, {'Content-type': 'text/html'});
+            con.query(sql, function (err, result) {
+                if (err) throw err;
+            });
+            
+        })
+               
+        })
+ 
+        })
 
-}
+        }
+  
+    }
 
-}).listen(port, host);
+   }
+   
+http
+   .on('request', webServer)
+   .listen(port);
 
-console.log(`Servidor corriendo en el puerto ${port}`);
-
-
-
+//console.log('Servidor corriendo en http://localhost:3000')
